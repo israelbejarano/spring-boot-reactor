@@ -1,5 +1,7 @@
 package com.ideas.springboot.reactor.app;
 
+import javax.management.RuntimeErrorException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -37,9 +39,15 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Flux<String> nombres = Flux.just("Israel", "Juan", "José", "Rita")
-				.doOnNext(System.out::println); // es lo mismo que elemento -> System.out.println(elemento)
+		Flux<String> nombres = Flux.just("Israel", "Juan", "", "José", "Rita")
+				.doOnNext(e -> {
+					if(e.isEmpty()) {
+						throw new RuntimeException("nombres no puede ser vacío");
+					}
+					System.out.println(e);
+				});
 		
-		nombres.subscribe(log::info);
+		nombres.subscribe(e -> log.info(e), 
+				error -> log.error(error.getMessage()));
 	}
 }
