@@ -1,5 +1,8 @@
 package com.ideas.springboot.reactor.app;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.management.RuntimeErrorException;
 
 import org.slf4j.Logger;
@@ -41,8 +44,9 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Flux<Usuario> nombres = Flux.just("Israel Bejarano", "Juan Fulano", "José Fulano", "Rita Zutano", "Pedro Sillano", "Pedro Delgado")
-				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
+		Flux<String> nombres = Flux.just("Israel Bejarano", "Juan Fulano", "José Fulano", "Rita Zutano", "Pedro Sillano", "Pedro Delgado");
+		
+		Flux<Usuario> usuarios = nombres.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
 				.filter(usuario -> usuario.getNombre().equalsIgnoreCase("pedro"))
 				.doOnNext(usuario -> {
 					if(usuario == null) {
@@ -56,7 +60,7 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 					return usuario;
 				});
 		
-		nombres.subscribe(e -> log.info(e.toString()), 
+		usuarios.subscribe(e -> log.info(e.toString()), 
 				error -> log.error(error.getMessage()), new Runnable() {
 					
 					@Override
