@@ -55,7 +55,7 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 					return usuario;
 				});
 		
-		nombres.subscribe(e -> log.info(e.getNombre()), 
+		nombres.subscribe(e -> log.info(e.toString()), 
 				error -> log.error(error.getMessage()), new Runnable() {
 					
 					@Override
