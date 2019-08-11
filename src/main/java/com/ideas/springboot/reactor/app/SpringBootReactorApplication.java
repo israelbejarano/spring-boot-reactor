@@ -41,8 +41,9 @@ public class SpringBootReactorApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Flux<Usuario> nombres = Flux.just("Israel", "Juan", "José", "Rita")
-				.map(nombre -> new Usuario(nombre.toUpperCase(), null))
+		Flux<Usuario> nombres = Flux.just("Israel Bejarano", "Juan Fulano", "José Fulano", "Rita Zutano", "Pedro Sillano", "Pedro Delgado")
+				.map(nombre -> new Usuario(nombre.split(" ")[0].toUpperCase(), nombre.split(" ")[1].toUpperCase()))
+				.filter(usuario -> usuario.getNombre().equalsIgnoreCase("pedro"))
 				.doOnNext(usuario -> {
 					if(usuario == null) {
 						throw new RuntimeException("nombres no puede ser vacío");
